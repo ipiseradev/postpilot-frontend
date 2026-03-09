@@ -6,11 +6,13 @@ export default function App() {
   const [text, setText] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const analyzePost = async () => {
     if (!text.trim()) return;
 
     setLoading(true);
+    setSuccessMessage("");
 
     try {
       const res = await fetch(`${API_URL}/posts/analyze`, {
@@ -28,11 +30,25 @@ export default function App() {
       const data = await res.json();
       console.log("DATA DEL BACKEND:", data);
       setResult(data);
+      setSuccessMessage("Post analizado correctamente 🚀");
     } catch (error) {
       console.error(error);
       alert("Error analyzing post");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const copyHashtags = async () => {
+    if (!hashtags.length) return;
+
+    try {
+      const textToCopy = hashtags.map((tag) => tag.text).join(" ");
+      await navigator.clipboard.writeText(textToCopy);
+      setSuccessMessage("Hashtags copiados al portapapeles 📋");
+    } catch (error) {
+      console.error(error);
+      alert("No se pudieron copiar los hashtags");
     }
   };
 
@@ -206,6 +222,12 @@ export default function App() {
           </div>
         </div>
 
+        {successMessage && (
+          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 shadow-sm">
+            {successMessage}
+          </div>
+        )}
+
         <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
             <div className="mb-5">
@@ -238,7 +260,7 @@ export default function App() {
                   {loading && <span className="animate-pulse">⏳</span>}
                   <span>
                     {loading
-                      ? "Optimizando con IA..."
+                      ? "Analizando tu post..."
                       : "Optimizar post con IA"}
                   </span>
                 </div>
@@ -249,6 +271,7 @@ export default function App() {
                 onClick={() => {
                   setText("");
                   setResult(null);
+                  setSuccessMessage("");
                 }}
                 className="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
               >
@@ -328,9 +351,21 @@ export default function App() {
             </div>
 
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-slate-900">
-                Hashtags sugeridos
-              </h3>
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-lg font-bold text-slate-900">
+                  Hashtags sugeridos
+                </h3>
+
+                {hashtags.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={copyHashtags}
+                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100"
+                  >
+                    📋 Copiar hashtags
+                  </button>
+                )}
+              </div>
 
               {hashtags.length > 0 ? (
                 <div className="mt-4 flex flex-wrap gap-2">
