@@ -1,8 +1,16 @@
 {
-  "name": "postpilot-dashboard",
+  "name": "postpilot-frontend",
+  "description": "AI copilot que analiza publicaciones de LinkedIn antes de publicarlas: hook, legibilidad, narrativa y hashtags sugeridos.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "author": "Ignacio Pisera (https://github.com/ipiseradev)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ipiseradev/postpilot-frontend.git"
+  },
+  "homepage": "https://postpilot-frontend-six.vercel.app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
