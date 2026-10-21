@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
-const API_URL = "https://postpilot-api-v2.onrender.com";
+const API_URL =
+  import.meta.env.VITE_API_URL ?? "https://postpilot-api-v2.onrender.com";
 
 export default function App() {
   const [text, setText] = useState("");
@@ -28,7 +29,6 @@ export default function App() {
       }
 
       const data = await res.json();
-      console.log("DATA DEL BACKEND:", data);
       setResult(data);
       setSuccessMessage("Post analizado correctamente 🚀");
     } catch (error) {
